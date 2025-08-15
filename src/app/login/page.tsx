@@ -17,6 +17,10 @@ export default function LoginPage() {
     setSuccess("");
     if (isRegister) {
       // Register
+      if (!supabase) {
+        setError("Supabase client not initialized.");
+        return;
+      }
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -29,6 +33,10 @@ export default function LoginPage() {
       }
     } else {
       // Login
+      if (!supabase) {
+        setError("Supabase client not initialized.");
+        return;
+      }
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
