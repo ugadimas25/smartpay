@@ -20,6 +20,10 @@ export default function RegisterPage() {
     e.preventDefault();
     setError("");
     setSuccess("");
+    if (!supabase) {
+      setError("Supabase client not initialized.");
+      return;
+    }
     const { error: signUpError } = await supabase.auth.signUp({
       email: form.username,
       password: form.password,
