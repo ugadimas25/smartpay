@@ -24,7 +24,11 @@ export default function UserPembayaran({ user }: { user: User | null }) {
   // Fetch riwayat pembayaran user
   const fetchRiwayat = async () => {
     setLoading(true);
-    if (!user) return;
+    if (!user || !supabase) {
+      setRiwayat([]);
+      setLoading(false);
+      return;
+    }
     const { data } = await supabase
       .from("pembayaran")
       .select("*, bukti_url")
@@ -50,6 +54,11 @@ export default function UserPembayaran({ user }: { user: User | null }) {
       return;
     }
     // Upload file ke Supabase Storage
+    if (!supabase) {
+      setMessage("Supabase client tidak tersedia.");
+      setLoading(false);
+      return;
+    }
     const fileName = `${user.id}_${bulan}_${tahun}_${Date.now()}`;
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from("bukti-pembayaran")
