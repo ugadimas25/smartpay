@@ -13,13 +13,17 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const getUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      if (!data.user) {
-        router.push("/login");
-      } else {
-        setUser(data.user);
-      }
-      setLoading(false);
+        if (!supabase) {
+          setLoading(false);
+          return;
+        }
+        const { data } = await supabase.auth.getUser();
+        if (!data.user) {
+          router.push("/login");
+        } else {
+          setUser(data.user);
+        }
+        setLoading(false);
     };
     getUser();
   }, [router]);
