@@ -36,8 +36,15 @@ export default function RegisterPage() {
     });
     if (signUpError) {
       if (signUpError.message.includes("already registered")) {
-        setError("Email sudah terdaftar. Silakan gunakan email lain atau login.");
-        alert("Email sudah terdaftar. Silakan gunakan email lain atau login.");
+        // Cek di tabel warga, jika belum ada kirim ulang email konfirmasi
+        const { data: wargaData } = await supabase.from("warga").select("*").eq("email", form.username);
+        if (!wargaData || wargaData.length === 0) {
+          // Kirim ulang email konfirmasi
+          await supabase.auth.resend({ type: "signup", email: form.username });
+          setSuccess("Email konfirmasi signup telah dikirim ulang. Silakan cek email Anda.");
+        } else {
+          setError("Email sudah terdaftar. Silakan gunakan email lain atau login.");
+        }
       } else {
         setError(signUpError.message);
         alert(signUpError.message);
@@ -122,6 +129,17 @@ export default function RegisterPage() {
           </button>
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
           {success && <p className="text-green-600 text-sm text-center">{success}</p>}
+        {success && (
+          <div className="text-center mt-4">
+            <button
+              type="button"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold shadow hover:bg-indigo-700"
+              onClick={() => window.location.href = '/login'}
+            >
+              Kembali ke Login
+            </button>
+          </div>
+        )}
         </form>
       </div>
       <style jsx>{`

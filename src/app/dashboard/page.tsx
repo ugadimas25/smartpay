@@ -33,14 +33,16 @@ export default function DashboardPage() {
   const isAdmin = user?.email === "ugadimas@gmail.com";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex flex-col items-center justify-center py-10">
+  <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-10">
       <div className="max-w-4xl w-full mx-auto">
         <div className="flex items-center gap-4 mb-8">
-          <img src="/logo-komplek.png" alt="Logo" className="h-12 w-12 rounded-full border-2 border-indigo-300 shadow" />
-          <h1 className="text-4xl font-extrabold text-indigo-700 tracking-tight">SmartKomplek Dashboard</h1>
+          <span className="bg-gradient-to-tr from-indigo-400 via-purple-400 to-pink-400 rounded-full p-3 shadow-lg">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 10v4"/><path d="M16 10v4"/></svg>
+          </span>
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 via-purple-600 to-pink-500 tracking-tight">SmartKomplek Dashboard</h1>
         </div>
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-indigo-100">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 bg-gradient-to-r from-indigo-100 via-purple-50 to-pink-100 rounded-xl p-4">
             <div>
               <p className="text-lg text-gray-700">Selamat datang, <span className="font-semibold text-indigo-700">{user?.email}</span></p>
               <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold ${isAdmin ? "bg-yellow-100 text-yellow-700" : "bg-indigo-100 text-indigo-700"}`}>{isAdmin ? "Admin" : "User"}</span>
