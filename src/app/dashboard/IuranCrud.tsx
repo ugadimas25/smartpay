@@ -70,49 +70,67 @@ export default function IuranCrud() {
 
   return (
     <div className="mt-8">
-      <h2 className="text-xl font-bold mb-4">CRUD Iuran Bulanan</h2>
-      <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4 mb-6">
-        <input name="blok_rumah" value={form.blok_rumah} onChange={handleChange} placeholder="Blok Rumah" className="p-2 border rounded" required />
-        <input name="bulan" value={form.bulan} onChange={handleChange} placeholder="Bulan" className="p-2 border rounded" required />
-        <input name="tahun" value={form.tahun} onChange={handleChange} placeholder="Tahun" className="p-2 border rounded" required />
-        <input name="jumlah" value={form.jumlah} onChange={handleChange} placeholder="Jumlah" className="p-2 border rounded" required />
-        <select name="status" value={form.status} onChange={handleChange} className="p-2 border rounded" required>
-          <option value="">Status</option>
-          <option value="Lunas">Lunas</option>
-          <option value="Belum">Belum</option>
-        </select>
-        <button type="submit" className="col-span-2 bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 font-semibold">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 bg-indigo-50 p-4 rounded-xl shadow">
+        <div>
+          <label className="block text-sm font-semibold mb-1">Blok Rumah</label>
+          <input name="blok_rumah" value={form.blok_rumah} onChange={handleChange} placeholder="Blok Rumah" className="w-full p-2 border rounded text-gray-900 placeholder-gray-500" required />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold mb-1">Bulan</label>
+          <input name="bulan" value={form.bulan} onChange={handleChange} placeholder="Bulan" className="w-full p-2 border rounded text-gray-900 placeholder-gray-500" required />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold mb-1">Tahun</label>
+          <input name="tahun" value={form.tahun} onChange={handleChange} placeholder="Tahun" className="w-full p-2 border rounded text-gray-900 placeholder-gray-500" required />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold mb-1">Jumlah</label>
+          <input name="jumlah" value={form.jumlah} onChange={handleChange} placeholder="Jumlah" className="w-full p-2 border rounded text-gray-900 placeholder-gray-500" required />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold mb-1">Status</label>
+          <select name="status" value={form.status} onChange={handleChange} className="w-full p-2 border rounded text-gray-900 placeholder-gray-500" required>
+            <option value="">Status</option>
+            <option value="Lunas">Lunas</option>
+            <option value="Belum">Belum</option>
+          </select>
+        </div>
+        <button type="submit" className="col-span-1 md:col-span-3 bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 font-semibold mt-2">
           {editId ? "Update" : "Tambah"}
         </button>
       </form>
       {loading ? <p>Loading...</p> : (
-        <table className="w-full border text-sm">
-          <thead>
-            <tr className="bg-indigo-100">
-              <th className="border p-2">Blok Rumah</th>
-              <th className="border p-2">Bulan</th>
-              <th className="border p-2">Tahun</th>
-              <th className="border p-2">Jumlah</th>
-              <th className="border p-2">Status</th>
-              <th className="border p-2">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {iuran.map((item) => (
-              <tr key={item.id} className="hover:bg-indigo-50">
-                <td className="border p-2">{item.blok_rumah}</td>
-                <td className="border p-2">{item.bulan}</td>
-                <td className="border p-2">{item.tahun}</td>
-                <td className="border p-2">{item.jumlah}</td>
-                <td className="border p-2">{item.status}</td>
-                <td className="border p-2">
-                  <button onClick={() => handleEdit(item)} className="mr-2 text-indigo-600 hover:underline">Edit</button>
-                  <button onClick={() => item.id !== undefined && handleDelete(item.id)} className="text-red-500 hover:underline">Hapus</button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border text-sm rounded-xl overflow-hidden shadow">
+            <thead>
+              <tr className="bg-indigo-100">
+                <th className="border p-2">Blok Rumah</th>
+                <th className="border p-2">Bulan</th>
+                <th className="border p-2">Tahun</th>
+                <th className="border p-2">Jumlah</th>
+                <th className="border p-2">Status</th>
+                <th className="border p-2">Aksi</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {iuran.map((item) => (
+                <tr key={item.id} className="hover:bg-indigo-50 transition-all">
+                  <td className="border p-2 font-semibold text-indigo-700">{item.blok_rumah}</td>
+                  <td className="border p-2">{item.bulan}</td>
+                  <td className="border p-2">{item.tahun}</td>
+                  <td className="border p-2">{item.jumlah}</td>
+                  <td className="border p-2">
+                    <span className={`px-2 py-1 rounded text-xs font-bold ${item.status === "Lunas" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{item.status}</span>
+                  </td>
+                  <td className="border p-2">
+                    <button onClick={() => handleEdit(item)} className="mr-2 text-indigo-600 hover:underline font-bold">Edit</button>
+                    <button onClick={() => item.id !== undefined && handleDelete(item.id)} className="text-red-500 hover:underline font-bold">Hapus</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

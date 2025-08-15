@@ -33,21 +33,34 @@ export default function DashboardPage() {
   const isAdmin = user?.email === "ugadimas@gmail.com";
 
   return (
-    <div className="p-8 min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-4 text-indigo-700">Dashboard {isAdmin ? "Admin" : "User"}</h1>
-        <p className="mb-6 text-gray-700">Selamat datang, <span className="font-semibold">{user?.email}</span></p>
-        {isAdmin ? (
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h2 className="text-xl font-bold mb-4 text-purple-700">Monitoring Iuran Warga</h2>
-            <IuranCrud />
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex flex-col items-center justify-center py-10">
+      <div className="max-w-4xl w-full mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <img src="/logo-komplek.png" alt="Logo" className="h-12 w-12 rounded-full border-2 border-indigo-300 shadow" />
+          <h1 className="text-4xl font-extrabold text-indigo-700 tracking-tight">SmartKomplek Dashboard</h1>
+        </div>
+        <div className="bg-white rounded-2xl shadow-xl p-8 border border-indigo-100">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+            <div>
+              <p className="text-lg text-gray-700">Selamat datang, <span className="font-semibold text-indigo-700">{user?.email}</span></p>
+              <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold ${isAdmin ? "bg-yellow-100 text-yellow-700" : "bg-indigo-100 text-indigo-700"}`}>{isAdmin ? "Admin" : "User"}</span>
+            </div>
+            <div className="mt-4 md:mt-0">
+              <span className="text-sm text-gray-500">{new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+            </div>
           </div>
-        ) : (
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h2 className="text-xl font-bold mb-4 text-purple-700">Riwayat & Upload Pembayaran</h2>
-            <UserPembayaran user={user} />
-          </div>
-        )}
+          {isAdmin ? (
+            <div>
+              <h2 className="text-2xl font-bold mb-6 text-purple-700">Monitoring Iuran Warga</h2>
+              <IuranCrud />
+            </div>
+          ) : (
+            <div>
+              <h2 className="text-2xl font-bold mb-6 text-purple-700">Riwayat & Upload Pembayaran</h2>
+              <UserPembayaran user={user} />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
