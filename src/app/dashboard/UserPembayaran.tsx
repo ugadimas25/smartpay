@@ -1,10 +1,20 @@
 // Komponen pembayaran user: upload bukti dan riwayat pembayaran
 "use client";
 import { useEffect, useState } from "react";
+import { User } from '@supabase/supabase-js';
 import { supabase } from "@/lib/supabaseClient";
 
-export default function UserPembayaran({ user }: { user: any }) {
-  const [riwayat, setRiwayat] = useState<any[]>([]);
+type Pembayaran = {
+  id: number;
+  bulan: string;
+  tahun: string;
+  bukti_url: string;
+  blok_rumah: string;
+  nama_kk: string;
+  status: string;
+};
+export default function UserPembayaran({ user }: { user: User }) {
+  const [riwayat, setRiwayat] = useState<Pembayaran[]>([]);
   const [bulan, setBulan] = useState("");
   const [tahun, setTahun] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -25,6 +35,7 @@ export default function UserPembayaran({ user }: { user: any }) {
 
   useEffect(() => {
     if (user?.id) fetchRiwayat();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   // Handle upload

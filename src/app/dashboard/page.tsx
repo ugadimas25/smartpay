@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
+import { User } from '@supabase/supabase-js';
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import IuranCrud from "./IuranCrud";
 import UserPembayaran from "./UserPembayaran";
 
 export default function DashboardPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
