@@ -44,6 +44,19 @@ export default function LoginPage() {
       if (error) {
         setError(error.message);
       } else {
+        // Setelah login sukses, cek dan insert ke tabel warga jika belum ada
+        const { data: userData } = await supabase.auth.getUser();
+        if (userData?.user) {
+          const { data: wargaData } = await supabase.from("warga").select("*").eq("id", userData.user.id);
+          if (!wargaData || wargaData.length === 0) {
+            await supabase.from("warga").insert({
+              id: userData.user.id,
+              nama_kk: userData.user.user_metadata?.nama_kk || "",
+              blok_rumah: userData.user.user_metadata?.blok_rumah || "",
+              email: userData.user.email
+            });
+          }
+        }
         router.push("/dashboard");
       }
     }
