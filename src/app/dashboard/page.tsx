@@ -44,7 +44,13 @@ export default function DashboardPage() {
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-indigo-100">
     <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 bg-gradient-to-r from-indigo-100 via-purple-50 to-pink-100 rounded-xl p-4">
             <div>
-              <p className="text-lg text-gray-700">Selamat datang, <span className="font-semibold text-indigo-700">{user?.email}</span></p>
+              <p className="text-lg text-gray-700">
+                Selamat Datang, <span className="font-semibold text-indigo-700">{user?.user_metadata?.nama_kk}</span>
+                {user?.user_metadata?.blok_rumah && (
+                  <span className="font-semibold text-indigo-700"> | {user.user_metadata.blok_rumah}</span>
+                )}
+                <span className="font-semibold text-purple-700"> | Teras Country</span>
+              </p>
               <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold ${isAdmin ? "bg-yellow-100 text-yellow-700" : "bg-indigo-100 text-indigo-700"}`}>{isAdmin ? "Admin" : "User"}</span>
             </div>
             <div className="mt-4 md:mt-0">
