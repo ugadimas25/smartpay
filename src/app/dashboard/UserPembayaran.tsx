@@ -17,6 +17,8 @@ export default function UserPembayaran({ user }: { user: User | null }) {
   const [riwayat, setRiwayat] = useState<Pembayaran[]>([]);
   const [bulan, setBulan] = useState("");
   const [tahun, setTahun] = useState("");
+  const [filterBulan, setFilterBulan] = useState("");
+  const [filterTahun, setFilterTahun] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -29,11 +31,11 @@ export default function UserPembayaran({ user }: { user: User | null }) {
       setLoading(false);
       return;
     }
-    const { data } = await supabase
-      .from("pembayaran")
-      .select("*, bukti_url")
-      .eq("user_id", user.id)
-      .order("id", { ascending: false });
+    let query = supabase.from("pembayaran").select("*, bukti_url").eq("user_id", user.id);
+    if (filterBulan) query = query.eq("bulan", filterBulan);
+    if (filterTahun) query = query.eq("tahun", filterTahun);
+    query = query.order("id", { ascending: false });
+    const { data } = await query;
     setRiwayat(data || []);
     setLoading(false);
   };
@@ -41,7 +43,7 @@ export default function UserPembayaran({ user }: { user: User | null }) {
   useEffect(() => {
     if (user?.id) fetchRiwayat();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, filterBulan, filterTahun]);
 
   // Handle upload
   const handleUpload = async (e: React.FormEvent) => {
@@ -115,19 +117,48 @@ export default function UserPembayaran({ user }: { user: User | null }) {
       </form>
       {message && <p className="mb-4 text-center text-sm text-green-600">{message}</p>}
       <h3 className="text-lg font-bold mb-2 text-purple-700">Riwayat Pembayaran</h3>
-      {loading ? <p>Loading...</p> : (
-        <div className="grid gap-4 md:grid-cols-2">
-          {riwayat.length === 0 ? <p className="text-gray-500">Belum ada pembayaran.</p> : riwayat.map(item => (
-            <div key={item.id} className="bg-white rounded-xl shadow p-4 border border-indigo-100">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="font-semibold text-indigo-700">{item.bulan} {item.tahun}</span>
-                <span className={`px-2 py-1 rounded text-xs font-bold ${item.status === "Sudah Bayar" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{item.status}</span>
-              </div>
-              <div className="mb-2 text-sm text-gray-700">Blok: <span className="font-semibold">{item.blok_rumah}</span></div>
-              <div className="mb-2 text-sm text-gray-700">Nama KK: <span className="font-semibold">{item.nama_kk}</span></div>
-              {item.bukti_url && <a href={item.bukti_url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline text-sm">Lihat Bukti</a>}
-            </div>
+      <div className="flex gap-4 mb-4">
+        <select value={filterBulan} onChange={e => setFilterBulan(e.target.value)} className="p-2 border rounded text-gray-900">
+          <option value="">Filter Bulan</option>
+          {["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"].map(b => (
+            <option key={b} value={b}>{b}</option>
           ))}
+        </select>
+        <input type="number" value={filterTahun} onChange={e => setFilterTahun(e.target.value)} placeholder="Filter Tahun" className="p-2 border rounded text-gray-900 w-32" min="2020" max="2100" />
+        <button type="button" className="p-2 bg-gray-200 rounded" onClick={() => { setFilterBulan(""); setFilterTahun(""); }}>Reset</button>
+      </div>
+      {loading ? <p>Loading...</p> : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full border rounded-xl shadow bg-white">
+            <thead className="bg-indigo-600 text-white">
+              <tr>
+                <th className="px-4 py-2">Bulan</th>
+                <th className="px-4 py-2">Tahun</th>
+                <th className="px-4 py-2">Blok</th>
+                <th className="px-4 py-2">Nama KK</th>
+                <th className="px-4 py-2">Status</th>
+                <th className="px-4 py-2">Bukti</th>
+              </tr>
+            </thead>
+            <tbody>
+              {riwayat.length === 0 ? (
+                <tr><td colSpan={6} className="text-center py-4 text-gray-500">Belum ada pembayaran.</td></tr>
+              ) : riwayat.map(item => (
+                <tr key={item.id} className="border-b hover:bg-indigo-50 transition">
+                  <td className="px-4 py-2 font-semibold text-indigo-700">{item.bulan}</td>
+                  <td className="px-4 py-2">{item.tahun}</td>
+                  <td className="px-4 py-2">{item.blok_rumah}</td>
+                  <td className="px-4 py-2">{item.nama_kk}</td>
+                  <td className="px-4 py-2">
+                    <span className={`px-2 py-1 rounded text-xs font-bold ${item.status === "Sudah Bayar" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{item.status}</span>
+                  </td>
+                  <td className="px-4 py-2">
+                    {item.bukti_url && <a href={item.bukti_url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline text-sm">Lihat Bukti</a>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
