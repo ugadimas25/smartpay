@@ -47,14 +47,22 @@ export default function LoginPage() {
         // Setelah login sukses, cek dan insert ke tabel warga jika belum ada
         const { data: userData } = await supabase.auth.getUser();
         if (userData?.user) {
-          const { data: wargaData } = await supabase.from("warga").select("*").eq("id", userData.user.id);
+          const { data: wargaData, error: wargaError } = await supabase.from("warga").select("*").eq("id", userData.user.id);
+          if (wargaError) {
+            setError("Gagal cek warga: " + wargaError.message);
+            return;
+          }
           if (!wargaData || wargaData.length === 0) {
-            await supabase.from("warga").insert({
+            const { error: insertError } = await supabase.from("warga").insert({
               id: userData.user.id,
               nama_kk: userData.user.user_metadata?.nama_kk || "",
               blok_rumah: userData.user.user_metadata?.blok_rumah || "",
               email: userData.user.email
             });
+            if (insertError) {
+              setError("Gagal insert warga: " + insertError.message);
+              return;
+            }
           }
         }
         router.push("/dashboard");
