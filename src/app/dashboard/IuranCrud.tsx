@@ -20,6 +20,11 @@ export default function IuranCrud() {
   // Fetch data
   const fetchIuran = async () => {
     setLoading(true);
+    if (!supabase) {
+      setIuran([]);
+      setLoading(false);
+      return;
+    }
     const { data } = await supabase.from("iuran").select("*").order("id", { ascending: false });
     setIuran(data || []);
     setLoading(false);
@@ -38,6 +43,7 @@ export default function IuranCrud() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    if (!supabase) return;
     if (editId) {
       await supabase.from("iuran").update(form).eq("id", editId);
     } else {
@@ -57,7 +63,8 @@ export default function IuranCrud() {
   // Delete
   const handleDelete = async (id: number) => {
     setLoading(true);
-    await supabase.from("iuran").delete().eq("id", id);
+  if (!supabase) return;
+  await supabase.from("iuran").delete().eq("id", id);
     fetchIuran();
   };
 
