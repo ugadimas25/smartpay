@@ -43,6 +43,16 @@ export default function RegisterPage() {
         alert(signUpError.message);
       }
     } else {
+      // Insert ke tabel warga
+      const { data: userData } = await supabase.auth.getUser();
+      if (userData?.user) {
+        await supabase.from("warga").insert({
+          id: userData.user.id,
+          nama_kk: form.namaKK,
+          blok_rumah: form.blokRumah,
+          email: form.username
+        });
+      }
       setSuccess("Registrasi berhasil! Silakan cek email untuk verifikasi.");
     }
   };
