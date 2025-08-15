@@ -13,7 +13,7 @@ type Pembayaran = {
   nama_kk: string;
   status: string;
 };
-export default function UserPembayaran({ user }: { user: User }) {
+export default function UserPembayaran({ user }: { user: User | null }) {
   const [riwayat, setRiwayat] = useState<Pembayaran[]>([]);
   const [bulan, setBulan] = useState("");
   const [tahun, setTahun] = useState("");
@@ -24,6 +24,7 @@ export default function UserPembayaran({ user }: { user: User }) {
   // Fetch riwayat pembayaran user
   const fetchRiwayat = async () => {
     setLoading(true);
+    if (!user) return;
     const { data } = await supabase
       .from("pembayaran")
       .select("*, bukti_url")
@@ -43,7 +44,7 @@ export default function UserPembayaran({ user }: { user: User }) {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-    if (!file || !bulan || !tahun) {
+    if (!file || !bulan || !tahun || !user) {
       setMessage("Lengkapi semua data dan upload file bukti!");
       setLoading(false);
       return;
