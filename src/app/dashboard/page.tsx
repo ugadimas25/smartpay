@@ -31,9 +31,10 @@ export default function DashboardPage() {
 
   if (loading) return <div>Loading...</div>;
 
-  const isAdmin = user?.email === "ugadimas@gmail.com";
+  // Hapus pengecekan email, admin hanya berdasarkan is_admin flag
 
   const isAdminFlag = user?.user_metadata?.is_admin === true;
+  // isAdminFlag diambil dari user_metadata Supabase, di-set manual di DB
   return (
   <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-10">
       <div className="max-w-5xl w-full mx-auto">
@@ -78,12 +79,8 @@ export default function DashboardPage() {
               <IuranCrud />
               <div className="mt-10">
                 <h2 className="text-2xl font-bold mb-6 text-purple-700">Monitoring Pembayaran Semua Anggota</h2>
-                {/* Dashboard admin pembayaran */}
                 <div className="bg-white rounded-xl shadow p-4 border border-indigo-100">
-                  {/* Import dan render komponen AdminDashboard di sini */}
                   <div>
-                    {/* Komponen AdminDashboard akan menampilkan tabel pembayaran semua anggota */}
-                    {/* Pastikan file AdminDashboard.tsx sudah ada di folder dashboard */}
                     <AdminDashboard />
                   </div>
                 </div>
