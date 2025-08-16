@@ -125,7 +125,6 @@ export default function UserPembayaran({ user }: { user: User | null }) {
           ))}
         </select>
         <input type="number" value={filterTahun} onChange={e => setFilterTahun(e.target.value)} placeholder="Filter Tahun" className="p-2 border rounded text-gray-900 w-32" min="2020" max="2100" />
-        <button type="button" className="p-2 bg-gray-200 rounded" onClick={() => { setFilterBulan(""); setFilterTahun(""); }}>Reset</button>
         <button
           type="button"
           className="p-2 px-4 bg-red-500 text-white rounded-lg font-semibold shadow hover:bg-red-600 transition"

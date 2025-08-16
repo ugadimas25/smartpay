@@ -4,7 +4,8 @@ import { supabase } from "@/lib/supabaseClient";
 
 export default function AdminDashboard() {
   // Sorting
-  type SortConfig = { key: keyof PembayaranRow | keyof PembayaranRow['warga'] | null; direction: 'asc' | 'desc' };
+  type SortKey = 'nama_kk' | 'blok_rumah' | 'email' | 'bulan' | 'tahun' | 'status' | null;
+  type SortConfig = { key: SortKey; direction: 'asc' | 'desc' };
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: null, direction: 'asc' });
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,8 +54,37 @@ export default function AdminDashboard() {
 
   const sortedPembayaran = [...filteredPembayaran].sort((a, b) => {
     if (!sortConfig.key) return 0;
-  const aValue = sortConfig.key in a ? a[sortConfig.key as keyof PembayaranRow] : a.warga?.[sortConfig.key as keyof PembayaranRow['warga']];
-  const bValue = sortConfig.key in b ? b[sortConfig.key as keyof PembayaranRow] : b.warga?.[sortConfig.key as keyof PembayaranRow['warga']];
+    let aValue: string | undefined;
+    let bValue: string | undefined;
+    switch (sortConfig.key) {
+      case 'nama_kk':
+        aValue = a.warga?.nama_kk;
+        bValue = b.warga?.nama_kk;
+        break;
+      case 'blok_rumah':
+        aValue = a.warga?.blok_rumah;
+        bValue = b.warga?.blok_rumah;
+        break;
+      case 'email':
+        aValue = a.warga?.email;
+        bValue = b.warga?.email;
+        break;
+      case 'bulan':
+        aValue = a.bulan;
+        bValue = b.bulan;
+        break;
+      case 'tahun':
+        aValue = a.tahun;
+        bValue = b.tahun;
+        break;
+      case 'status':
+        aValue = a.status;
+        bValue = b.status;
+        break;
+      default:
+        aValue = undefined;
+        bValue = undefined;
+    }
     if (aValue === undefined || bValue === undefined) return 0;
     if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
     if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
@@ -82,12 +112,12 @@ export default function AdminDashboard() {
             <table className="min-w-full border rounded-xl shadow bg-white">
               <thead className="bg-indigo-600 text-white">
                 <tr>
-                  <th className="px-4 py-2 cursor-pointer" onClick={() => setSortConfig(s => ({ key: 'nama_kk', direction: s.key === 'nama_kk' && s.direction === 'asc' ? 'desc' : 'asc' }))}>Nama KK {sortConfig.key === 'nama_kk' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
-                  <th className="px-4 py-2 cursor-pointer" onClick={() => setSortConfig(s => ({ key: 'blok_rumah', direction: s.key === 'blok_rumah' && s.direction === 'asc' ? 'desc' : 'asc' }))}>Blok {sortConfig.key === 'blok_rumah' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
-                  <th className="px-4 py-2 cursor-pointer" onClick={() => setSortConfig(s => ({ key: 'email', direction: s.key === 'email' && s.direction === 'asc' ? 'desc' : 'asc' }))}>Email {sortConfig.key === 'email' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
-                  <th className="px-4 py-2 cursor-pointer" onClick={() => setSortConfig(s => ({ key: 'bulan', direction: s.key === 'bulan' && s.direction === 'asc' ? 'desc' : 'asc' }))}>Bulan {sortConfig.key === 'bulan' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
-                  <th className="px-4 py-2 cursor-pointer" onClick={() => setSortConfig(s => ({ key: 'tahun', direction: s.key === 'tahun' && s.direction === 'asc' ? 'desc' : 'asc' }))}>Tahun {sortConfig.key === 'tahun' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
-                  <th className="px-4 py-2 cursor-pointer" onClick={() => setSortConfig(s => ({ key: 'status', direction: s.key === 'status' && s.direction === 'asc' ? 'desc' : 'asc' }))}>Status {sortConfig.key === 'status' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
+                  <th className="px-4 py-2 cursor-pointer" onClick={() => setSortConfig({ key: 'nama_kk', direction: sortConfig.key === 'nama_kk' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Nama KK {sortConfig.key === 'nama_kk' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
+                  <th className="px-4 py-2 cursor-pointer" onClick={() => setSortConfig({ key: 'blok_rumah', direction: sortConfig.key === 'blok_rumah' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Blok {sortConfig.key === 'blok_rumah' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
+                  <th className="px-4 py-2 cursor-pointer" onClick={() => setSortConfig({ key: 'email', direction: sortConfig.key === 'email' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Email {sortConfig.key === 'email' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
+                  <th className="px-4 py-2 cursor-pointer" onClick={() => setSortConfig({ key: 'bulan', direction: sortConfig.key === 'bulan' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Bulan {sortConfig.key === 'bulan' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
+                  <th className="px-4 py-2 cursor-pointer" onClick={() => setSortConfig({ key: 'tahun', direction: sortConfig.key === 'tahun' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Tahun {sortConfig.key === 'tahun' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
+                  <th className="px-4 py-2 cursor-pointer" onClick={() => setSortConfig({ key: 'status', direction: sortConfig.key === 'status' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Status {sortConfig.key === 'status' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
                   <th className="px-4 py-2">Bukti</th>
                 </tr>
               </thead>
