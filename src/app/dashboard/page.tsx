@@ -32,9 +32,10 @@ export default function DashboardPage() {
 
   const isAdmin = user?.email === "ugadimas@gmail.com";
 
+  const isAdminFlag = user?.user_metadata?.is_admin === true;
   return (
   <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-10">
-      <div className="max-w-4xl w-full mx-auto">
+      <div className="max-w-5xl w-full mx-auto">
         <div className="flex items-center gap-4 mb-8">
           <span className="bg-gradient-to-tr from-indigo-400 via-purple-400 to-pink-400 rounded-full p-3 shadow-lg">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 10v4"/><path d="M16 10v4"/></svg>
@@ -42,7 +43,18 @@ export default function DashboardPage() {
           <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 via-purple-600 to-pink-500 tracking-tight">SmartKomplek Dashboard</h1>
         </div>
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-indigo-100">
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 bg-gradient-to-r from-indigo-100 via-purple-50 to-pink-100 rounded-xl p-4">
+          <div className="flex justify-end mb-4">
+            <button
+              className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold shadow hover:bg-red-600 transition"
+              onClick={async () => {
+                await supabase.auth.signOut();
+                router.push("/login");
+              }}
+            >
+              Logout
+            </button>
+          </div>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 bg-gradient-to-r from-indigo-100 via-purple-50 to-pink-100 rounded-xl p-4">
             <div>
               <p className="text-lg text-gray-700">
                 Selamat Datang, <span className="font-semibold text-indigo-700">{user?.user_metadata?.nama_kk}</span>
@@ -51,16 +63,29 @@ export default function DashboardPage() {
                 )}
                 <span className="font-semibold text-purple-700"> | Teras Country</span>
               </p>
-              <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold ${isAdmin ? "bg-yellow-100 text-yellow-700" : "bg-indigo-100 text-indigo-700"}`}>{isAdmin ? "Admin" : "User"}</span>
+              <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold ${isAdminFlag ? "bg-yellow-100 text-yellow-700" : "bg-indigo-100 text-indigo-700"}`}>{isAdminFlag ? "Admin" : "User"}</span>
             </div>
             <div className="mt-4 md:mt-0">
               <span className="text-sm text-gray-500">{new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
             </div>
           </div>
-          {isAdmin ? (
+          {isAdminFlag ? (
             <div>
               <h2 className="text-2xl font-bold mb-6 text-purple-700">Monitoring Iuran Warga</h2>
               <IuranCrud />
+              <div className="mt-10">
+                <h2 className="text-2xl font-bold mb-6 text-purple-700">Monitoring Pembayaran Semua Anggota</h2>
+                {/* Dashboard admin pembayaran */}
+                <div className="bg-white rounded-xl shadow p-4 border border-indigo-100">
+                  {/* Import dan render komponen AdminDashboard di sini */}
+                  {/* @ts-ignore */}
+                  <div>
+                    {/* Komponen AdminDashboard akan menampilkan tabel pembayaran semua anggota */}
+                    {/* Pastikan file AdminDashboard.tsx sudah ada di folder dashboard */}
+                    {require('./AdminDashboard').default()}
+                  </div>
+                </div>
+              </div>
             </div>
           ) : (
             <div>
