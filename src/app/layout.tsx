@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SmartKomplek",
+  title: "SmartPay",
   description: "Platform Manajemen Komplek Cerdas",
 };
 

@@ -56,7 +56,7 @@ export default function DashboardPage() {
           <span className="bg-gradient-to-tr from-indigo-400 via-purple-400 to-pink-400 rounded-full p-3 shadow-lg">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 10v4"/><path d="M16 10v4"/></svg>
           </span>
-          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 via-purple-600 to-pink-500 tracking-tight">SmartKomplek Dashboard</h1>
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 via-purple-600 to-pink-500 tracking-tight">SmartPay Dashboard</h1>
         </div>
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-indigo-100">
           <div className="flex justify-end mb-4">
