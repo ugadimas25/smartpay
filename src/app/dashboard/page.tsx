@@ -48,7 +48,9 @@ export default function DashboardPage() {
             <button
               className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold shadow hover:bg-red-600 transition"
               onClick={async () => {
-                await supabase.auth.signOut();
+                if (supabase) {
+                  await supabase.auth.signOut();
+                }
                 router.push("/login");
               }}
             >
