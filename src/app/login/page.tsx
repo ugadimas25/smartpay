@@ -87,7 +87,7 @@ export default function LoginPage() {
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 10v4"/><path d="M16 10v4"/></svg>
           </div>
           <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 via-purple-600 to-pink-500 mb-1 tracking-tight">SmartPay</h2>
-          <span className="text-gray-500 text-sm">Login untuk monitoring iuran bulanan</span>
+          <span className="text-gray-500 text-sm">Effortlessly manage, and track your community bills.</span>
         </div>
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
