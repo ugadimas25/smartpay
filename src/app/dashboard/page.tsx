@@ -19,17 +19,25 @@ export default function DashboardPage() {
         setLoading(false);
         return;
       }
-      const { data } = await supabase.auth.getUser();
+    const { data, error: authError } = await supabase.auth.getUser();
+      if (authError) {
+        console.error("Supabase Auth Error:", authError);
+        alert("Supabase Auth Error: " + authError.message);
+      }
       if (!data.user) {
         router.push("/login");
       } else {
         setUser(data.user);
         // Ambil flag admin langsung dari tabel warga
-        const { data: wargaData } = await supabase
+        const { data: wargaData, error: wargaError, status } = await supabase
           .from("warga")
           .select("is_admin")
           .eq("id", data.user.id)
           .single();
+        if (wargaError) {
+          alert("Supabase DB Error: " + wargaError.message);
+        }
+              // ...
         setIsAdminFlag(wargaData?.is_admin === true);
       }
       setLoading(false);
@@ -84,14 +92,9 @@ export default function DashboardPage() {
           </div>
           {isAdminFlag ? (
             <div>
-              <h2 className="text-2xl font-bold mb-6 text-purple-700">Monitoring Iuran Warga</h2>
-              <IuranCrud />
-              <div className="mt-10">
-                <h2 className="text-2xl font-bold mb-6 text-purple-700">Monitoring Pembayaran Semua Anggota</h2>
-                <div className="bg-white rounded-xl shadow p-4 border border-indigo-100">
-                  <div>
-                    <AdminDashboard />
-                  </div>
+              <div className="bg-white rounded-xl shadow p-4 border border-indigo-100">
+                <div>
+                  <AdminDashboard />
                 </div>
               </div>
             </div>
