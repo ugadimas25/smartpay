@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { User } from '@supabase/supabase-js';
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
-import IuranCrud from "./IuranCrud";
 import AdminDashboard from "./AdminDashboard";
 import UserPembayaran from "./UserPembayaran";
 
@@ -29,7 +28,7 @@ export default function DashboardPage() {
       } else {
         setUser(data.user);
         // Ambil flag admin langsung dari tabel warga
-        const { data: wargaData, error: wargaError, status } = await supabase
+        const { data: wargaData, error: wargaError } = await supabase
           .from("warga")
           .select("is_admin")
           .eq("id", data.user.id)

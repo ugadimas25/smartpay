@@ -53,8 +53,8 @@ export default function AdminDashboard() {
 
   const sortedPembayaran = [...filteredPembayaran].sort((a, b) => {
     if (!sortConfig.key) return 0;
-    let aValue = sortConfig.key in a ? a[sortConfig.key as keyof PembayaranRow] : a.warga?.[sortConfig.key as keyof PembayaranRow['warga']];
-    let bValue = sortConfig.key in b ? b[sortConfig.key as keyof PembayaranRow] : b.warga?.[sortConfig.key as keyof PembayaranRow['warga']];
+  const aValue = sortConfig.key in a ? a[sortConfig.key as keyof PembayaranRow] : a.warga?.[sortConfig.key as keyof PembayaranRow['warga']];
+  const bValue = sortConfig.key in b ? b[sortConfig.key as keyof PembayaranRow] : b.warga?.[sortConfig.key as keyof PembayaranRow['warga']];
     if (aValue === undefined || bValue === undefined) return 0;
     if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
     if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
