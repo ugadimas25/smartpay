@@ -12,11 +12,13 @@ type Pembayaran = {
   blok_rumah: string;
   nama_kk: string;
   status: string;
+  jenis_pembayaran: string;
 };
 export default function UserPembayaran({ user }: { user: User | null }) {
   const [riwayat, setRiwayat] = useState<Pembayaran[]>([]);
   const [bulan, setBulan] = useState("");
   const [tahun, setTahun] = useState("");
+  const [jenisPembayaran, setJenisPembayaran] = useState("");
   const [filterBulan, setFilterBulan] = useState("");
   const [filterTahun, setFilterTahun] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -50,8 +52,8 @@ export default function UserPembayaran({ user }: { user: User | null }) {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-    if (!file || !bulan || !tahun || !user) {
-      setMessage("Lengkapi semua data dan upload file bukti!");
+    if (!file || !bulan || !tahun || !jenisPembayaran || !user) {
+      setMessage("Lengkapi semua data, pilih jenis pembayaran, dan upload file bukti!");
       setLoading(false);
       return;
     }
@@ -75,43 +77,55 @@ export default function UserPembayaran({ user }: { user: User | null }) {
       : "";
     // Simpan data pembayaran
     await supabase.from("pembayaran").insert({
-      user_id: user.id,
-      nama_kk: user.user_metadata?.nama_kk,
-      blok_rumah: user.user_metadata?.blok_rumah,
-      bulan,
-      tahun,
-      bukti_url,
-      status: "Sudah Bayar",
+  user_id: user.id,
+  nama_kk: user.user_metadata?.nama_kk,
+  blok_rumah: user.user_metadata?.blok_rumah,
+  bulan,
+  tahun,
+  jenis_pembayaran: jenisPembayaran,
+  bukti_url,
+  status: "Sudah Bayar",
     });
     setMessage("Bukti pembayaran berhasil diupload!");
     setFile(null);
-    setBulan("");
-    setTahun("");
+  setBulan("");
+  setTahun("");
+  setJenisPembayaran("");
     fetchRiwayat();
     setLoading(false);
   };
 
   return (
     <div>
-      <form onSubmit={handleUpload} className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4 items-end bg-indigo-50 p-4 rounded-xl shadow">
-        <div>
+  <form onSubmit={handleUpload} className="mb-6 flex flex-wrap gap-4 items-end bg-indigo-50 p-4 rounded-xl shadow">
+  <div className="flex flex-col">
+          <label className="block text-sm font-semibold mb-1">Jenis Pembayaran</label>
+          <select value={jenisPembayaran} onChange={e => setJenisPembayaran(e.target.value)} className="w-56 p-2 border rounded text-gray-900 placeholder-gray-500" required>
+            <option value="">Pilih Jenis Pembayaran</option>
+            <option value="IPL">IPL</option>
+            <option value="CCTV">CCTV</option>
+            <option value="Iuran Bulanan Gang H Genap J Ganjil">Iuran Bulanan Gang H Genap J Ganjil</option>
+            <option value="Dan lain lain">Dan lain lain</option>
+          </select>
+        </div>
+  <div className="flex flex-col">
           <label className="block text-sm font-semibold mb-1">Bulan</label>
-          <select value={bulan} onChange={e => setBulan(e.target.value)} className="w-full p-2 border rounded text-gray-900 placeholder-gray-500" required>
+          <select value={bulan} onChange={e => setBulan(e.target.value)} className="w-56 p-2 border rounded text-gray-900 placeholder-gray-500" required>
             <option value="">Pilih Bulan</option>
             {['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'].map(b => (
               <option key={b} value={b}>{b}</option>
             ))}
           </select>
         </div>
-        <div>
+  <div className="flex flex-col">
           <label className="block text-sm font-semibold mb-1">Tahun</label>
-          <input type="number" value={tahun} onChange={e => setTahun(e.target.value)} className="w-full p-2 border rounded text-gray-900 placeholder-gray-500" required min="2020" max="2100" />
+          <input type="number" value={tahun} onChange={e => setTahun(e.target.value)} className="w-40 p-2 border rounded text-gray-900 placeholder-gray-500" required min="2020" max="2100" placeholder="Contoh: 2025" />
         </div>
-        <div>
+  <div className="flex flex-col">
           <label className="block text-sm font-semibold mb-1">Upload Bukti</label>
-          <input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] || null)} className="w-full p-2 border rounded text-gray-900 placeholder-gray-500" required />
+          <input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] || null)} className="w-56 p-2 border rounded text-gray-900 placeholder-gray-500" required />
         </div>
-        <button type="submit" className="col-span-1 md:col-span-3 bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 font-semibold mt-2" disabled={loading}>
+        <button type="submit" className="bg-indigo-600 text-white py-2 px-6 rounded hover:bg-indigo-700 font-semibold" disabled={loading}>
           {loading ? "Uploading..." : "Upload Bukti Pembayaran"}
         </button>
       </form>
@@ -138,6 +152,7 @@ export default function UserPembayaran({ user }: { user: User | null }) {
           <table className="min-w-full border rounded-xl shadow bg-white">
             <thead className="bg-indigo-600 text-white">
               <tr>
+                <th className="px-4 py-2">Jenis</th>
                 <th className="px-4 py-2">Bulan</th>
                 <th className="px-4 py-2">Tahun</th>
                 <th className="px-4 py-2">Blok</th>
@@ -148,9 +163,10 @@ export default function UserPembayaran({ user }: { user: User | null }) {
             </thead>
             <tbody>
               {riwayat.length === 0 ? (
-                <tr><td colSpan={6} className="text-center py-4 text-gray-500">Belum ada pembayaran.</td></tr>
+                <tr><td colSpan={7} className="text-center py-4 text-gray-500">Belum ada pembayaran.</td></tr>
               ) : riwayat.map(item => (
                 <tr key={item.id} className="border-b hover:bg-indigo-50 transition">
+                  <td className="px-4 py-2 font-semibold text-indigo-700">{item.jenis_pembayaran}</td>
                   <td className="px-4 py-2 font-semibold text-indigo-700">{item.bulan}</td>
                   <td className="px-4 py-2 font-semibold text-indigo-700">{item.tahun}</td>
                   <td className="px-4 py-2 font-semibold text-indigo-700">{item.blok_rumah}</td>
