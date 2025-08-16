@@ -102,15 +102,15 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50 py-10">
       <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl p-8 border border-indigo-100">
-  <h2 className="text-2xl font-bold mb-6 text-purple-700">Dashboard Admin</h2>
-        {/* Filter satu baris, tulisan jelas */}
-  <div className="mb-4 flex gap-2 items-center justify-center">
-          <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-32" placeholder="Nama KK" value={filter.nama_kk} onChange={e => setFilter(f => ({ ...f, nama_kk: e.target.value }))} />
-          <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-32" placeholder="Blok Rumah" value={filter.blok_rumah} onChange={e => setFilter(f => ({ ...f, blok_rumah: e.target.value }))} />
-          <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-32" placeholder="Jenis Pembayaran" value={filter.jenis_pembayaran} onChange={e => setFilter(f => ({ ...f, jenis_pembayaran: e.target.value }))} />
-          <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-24" placeholder="Bulan" value={filter.bulan} onChange={e => setFilter(f => ({ ...f, bulan: e.target.value }))} />
-          <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-20" placeholder="Tahun" value={filter.tahun} onChange={e => setFilter(f => ({ ...f, tahun: e.target.value }))} />
-          <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-24" placeholder="Status" value={filter.status} onChange={e => setFilter(f => ({ ...f, status: e.target.value }))} />
+        <h2 className="text-2xl font-bold mb-6 text-purple-700">Dashboard Admin</h2>
+        {/* Filter satu baris, responsif di mobile */}
+        <div className="mb-4 flex flex-wrap gap-2 items-center justify-center">
+          <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-32 sm:w-32 xs:w-full" placeholder="Nama KK" value={filter.nama_kk} onChange={e => setFilter(f => ({ ...f, nama_kk: e.target.value }))} />
+          <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-32 sm:w-32 xs:w-full" placeholder="Blok Rumah" value={filter.blok_rumah} onChange={e => setFilter(f => ({ ...f, blok_rumah: e.target.value }))} />
+          <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-32 sm:w-32 xs:w-full" placeholder="Jenis Pembayaran" value={filter.jenis_pembayaran} onChange={e => setFilter(f => ({ ...f, jenis_pembayaran: e.target.value }))} />
+          <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-24 sm:w-24 xs:w-full" placeholder="Bulan" value={filter.bulan} onChange={e => setFilter(f => ({ ...f, bulan: e.target.value }))} />
+          <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-20 sm:w-20 xs:w-full" placeholder="Tahun" value={filter.tahun} onChange={e => setFilter(f => ({ ...f, tahun: e.target.value }))} />
+          <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-24 sm:w-24 xs:w-full" placeholder="Status" value={filter.status} onChange={e => setFilter(f => ({ ...f, status: e.target.value }))} />
         </div>
         {loading ? <p>Loading...</p> : (
           <div className="overflow-x-auto">
