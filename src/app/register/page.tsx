@@ -4,16 +4,17 @@ import { supabase } from "@/lib/supabaseClient";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
-    namaKK: "",
-    blokRumah: "",
-    username: "",
-    password: "",
+  namaKK: "",
+  blokRumah: "",
+  namaPerumahan: "",
+  username: "",
+  password: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,6 +32,7 @@ export default function RegisterPage() {
         data: {
           nama_kk: form.namaKK,
           blok_rumah: form.blokRumah,
+          nama_perumahan: form.namaPerumahan,
         },
       },
     });
@@ -57,6 +59,7 @@ export default function RegisterPage() {
           id: userData.user.id,
           nama_kk: form.namaKK,
           blok_rumah: form.blokRumah,
+          nama_perumahan: form.namaPerumahan,
           email: form.username
         });
       }
@@ -75,6 +78,19 @@ export default function RegisterPage() {
           <span className="text-gray-500 text-sm">Isi data untuk membuat akun baru</span>
         </div>
         <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block text-purple-700 font-semibold mb-1" htmlFor="namaPerumahan">Nama Perumahan</label>
+            <input
+              id="namaPerumahan"
+              type="text"
+              name="namaPerumahan"
+              placeholder="Contoh: Teras Country"
+              value={form.namaPerumahan}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 transition bg-pink-50 text-gray-900 placeholder-gray-500"
+              required
+            />
+          </div>
           <div>
             <label className="block text-purple-700 font-semibold mb-1" htmlFor="namaKK">Nama KK</label>
             <input
