@@ -11,7 +11,7 @@ export default function AdminDashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
   // Filter
-  const [filter, setFilter] = useState({ nama_kk: '', blok_rumah: '', email: '', bulan: '', tahun: '', status: '', jenis_pembayaran: '' });
+  const [filter, setFilter] = useState({ nama_kk: '', blok_rumah: '', bulan: '', tahun: '', status: '', jenis_pembayaran: '' });
   type PembayaranRow = {
     id: number;
     bulan: string;
@@ -44,13 +44,12 @@ export default function AdminDashboard() {
   // Filtered & sorted data
   const filteredPembayaran = pembayaran.filter((item) => {
     return (
-      (!filter.nama_kk || item.warga?.nama_kk?.toLowerCase().includes(filter.nama_kk.toLowerCase())) &&
-      (!filter.blok_rumah || item.warga?.blok_rumah?.toLowerCase().includes(filter.blok_rumah.toLowerCase())) &&
-      (!filter.email || item.warga?.email?.toLowerCase().includes(filter.email.toLowerCase())) &&
-      (!filter.bulan || item.bulan?.toLowerCase().includes(filter.bulan.toLowerCase())) &&
-      (!filter.tahun || item.tahun?.toLowerCase().includes(filter.tahun.toLowerCase())) &&
-      (!filter.status || item.status?.toLowerCase().includes(filter.status.toLowerCase())) &&
-      (!filter.jenis_pembayaran || item.jenis_pembayaran?.toLowerCase().includes(filter.jenis_pembayaran.toLowerCase()))
+  (!filter.nama_kk || item.warga?.nama_kk?.toLowerCase().includes(filter.nama_kk.toLowerCase())) &&
+  (!filter.blok_rumah || item.warga?.blok_rumah?.toLowerCase().includes(filter.blok_rumah.toLowerCase())) &&
+  (!filter.bulan || item.bulan?.toLowerCase().includes(filter.bulan.toLowerCase())) &&
+  (!filter.tahun || item.tahun?.toLowerCase().includes(filter.tahun.toLowerCase())) &&
+  (!filter.status || item.status?.toLowerCase().includes(filter.status.toLowerCase())) &&
+  (!filter.jenis_pembayaran || item.jenis_pembayaran?.toLowerCase().includes(filter.jenis_pembayaran.toLowerCase()))
     );
   });
 
@@ -108,7 +107,6 @@ export default function AdminDashboard() {
   <div className="mb-4 flex gap-2 items-center justify-center">
           <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-32" placeholder="Nama KK" value={filter.nama_kk} onChange={e => setFilter(f => ({ ...f, nama_kk: e.target.value }))} />
           <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-32" placeholder="Blok Rumah" value={filter.blok_rumah} onChange={e => setFilter(f => ({ ...f, blok_rumah: e.target.value }))} />
-          <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-32" placeholder="Email" value={filter.email} onChange={e => setFilter(f => ({ ...f, email: e.target.value }))} />
           <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-32" placeholder="Jenis Pembayaran" value={filter.jenis_pembayaran} onChange={e => setFilter(f => ({ ...f, jenis_pembayaran: e.target.value }))} />
           <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-24" placeholder="Bulan" value={filter.bulan} onChange={e => setFilter(f => ({ ...f, bulan: e.target.value }))} />
           <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-20" placeholder="Tahun" value={filter.tahun} onChange={e => setFilter(f => ({ ...f, tahun: e.target.value }))} />
@@ -121,7 +119,6 @@ export default function AdminDashboard() {
                 <tr>
                   <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'nama_kk', direction: sortConfig.key === 'nama_kk' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Nama KK {sortConfig.key === 'nama_kk' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
                   <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'blok_rumah', direction: sortConfig.key === 'blok_rumah' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Blok {sortConfig.key === 'blok_rumah' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
-                  <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'email', direction: sortConfig.key === 'email' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Email {sortConfig.key === 'email' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
                   <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'jenis_pembayaran', direction: sortConfig.key === 'jenis_pembayaran' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Jenis {sortConfig.key === 'jenis_pembayaran' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
                   <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'bulan', direction: sortConfig.key === 'bulan' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Bulan {sortConfig.key === 'bulan' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
                   <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'tahun', direction: sortConfig.key === 'tahun' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Tahun {sortConfig.key === 'tahun' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
@@ -136,7 +133,6 @@ export default function AdminDashboard() {
                   <tr key={item.id} className="border-b border-indigo-100 hover:bg-indigo-50 transition">
                     <td className="px-4 py-3 text-center font-semibold text-indigo-700 align-middle">{item.warga?.nama_kk}</td>
                     <td className="px-4 py-3 text-center font-semibold text-indigo-700 align-middle">{item.warga?.blok_rumah}</td>
-                    <td className="px-4 py-3 text-center text-indigo-700 font-semibold align-middle">{item.warga?.email}</td>
                     <td className="px-4 py-3 text-center text-indigo-700 font-semibold align-middle whitespace-pre-line">{item.jenis_pembayaran}</td>
                     <td className="px-4 py-3 text-center text-indigo-700 font-semibold align-middle">{item.bulan}</td>
                     <td className="px-4 py-3 text-center text-indigo-700 font-semibold align-middle">{item.tahun}</td>
