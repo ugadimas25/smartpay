@@ -10,21 +10,29 @@ import UserPembayaran from "./UserPembayaran";
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAdminFlag, setIsAdminFlag] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const getUser = async () => {
-        if (!supabase) {
-          setLoading(false);
-          return;
-        }
-        const { data } = await supabase.auth.getUser();
-        if (!data.user) {
-          router.push("/login");
-        } else {
-          setUser(data.user);
-        }
+      if (!supabase) {
         setLoading(false);
+        return;
+      }
+      const { data } = await supabase.auth.getUser();
+      if (!data.user) {
+        router.push("/login");
+      } else {
+        setUser(data.user);
+        // Ambil flag admin langsung dari tabel warga
+        const { data: wargaData } = await supabase
+          .from("warga")
+          .select("is_admin")
+          .eq("id", data.user.id)
+          .single();
+        setIsAdminFlag(wargaData?.is_admin === true);
+      }
+      setLoading(false);
     };
     getUser();
   }, [router]);
@@ -33,7 +41,6 @@ export default function DashboardPage() {
 
   // Hapus pengecekan email, admin hanya berdasarkan is_admin flag
 
-  const isAdminFlag = user?.user_metadata?.is_admin === true;
   // isAdminFlag diambil dari user_metadata Supabase, di-set manual di DB
   return (
   <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-10">
