@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import * as XLSX from "xlsx";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function AdminDashboard() {
@@ -27,6 +28,24 @@ export default function AdminDashboard() {
   };
   const [pembayaran, setPembayaran] = useState<PembayaranRow[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Download data as Excel
+  const handleDownloadExcel = () => {
+    // Ambil data yang sedang ditampilkan (paginatedPembayaran)
+    const dataToExport = paginatedPembayaran.map(item => ({
+      "Nama KK": item.warga?.nama_kk || "",
+      "Blok": item.warga?.blok_rumah || "",
+      "Jenis Pembayaran": item.jenis_pembayaran || "",
+      "Bulan": item.bulan,
+      "Tahun": item.tahun,
+      "Status": item.status === "Sudah Bayar" ? "Lunas" : "Belum",
+      "Bukti": item.bukti_url || ""
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Pembayaran");
+    XLSX.writeFile(workbook, "data_pembayaran.xlsx");
+  };
 
   useEffect(() => {
     const fetchAllPembayaran = async () => {
@@ -102,7 +121,10 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50 py-10">
       <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl p-8 border border-indigo-100">
-        <h2 className="text-2xl font-bold mb-6 text-purple-700">Dashboard Admin</h2>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-2">
+          <h2 className="text-2xl font-bold text-purple-700">Dashboard Admin</h2>
+          <button onClick={handleDownloadExcel} className="bg-green-600 text-white px-4 py-2 rounded font-bold shadow hover:bg-green-700 transition w-full sm:w-auto">Download Excel</button>
+        </div>
         {/* Filter satu baris, responsif di mobile */}
         <div className="mb-4 flex flex-wrap gap-2 items-center justify-center">
           <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-32 sm:w-32 xs:w-full" placeholder="Nama KK" value={filter.nama_kk} onChange={e => setFilter(f => ({ ...f, nama_kk: e.target.value }))} />
