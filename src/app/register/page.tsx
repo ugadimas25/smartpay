@@ -94,7 +94,7 @@ export default function RegisterPage() {
               id="blokRumah"
               type="text"
               name="blokRumah"
-              placeholder="Blok Rumah"
+              placeholder="Contoh: J.11"
                 className="w-full px-4 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition bg-purple-50 text-gray-900 placeholder-gray-500"
                 onChange={handleChange}
               required

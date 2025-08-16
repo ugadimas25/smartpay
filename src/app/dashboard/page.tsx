@@ -72,7 +72,9 @@ export default function DashboardPage() {
                 {user?.user_metadata?.blok_rumah && (
                   <span className="font-semibold text-indigo-700"> | {user.user_metadata.blok_rumah}</span>
                 )}
-                <span className="font-semibold text-purple-700"> | Teras Country</span>
+                {user?.user_metadata?.nama_perumahan && (
+                  <span className="font-semibold text-pink-700"> | {user.user_metadata.nama_perumahan}</span>
+                )}
               </p>
               <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold ${isAdminFlag ? "bg-yellow-100 text-yellow-700" : "bg-indigo-100 text-indigo-700"}`}>{isAdminFlag ? "Admin" : "User"}</span>
             </div>
