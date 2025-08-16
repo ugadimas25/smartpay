@@ -3,13 +3,29 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function AdminDashboard() {
-  const [pembayaran, setPembayaran] = useState([]);
+  type PembayaranRow = {
+    id: number;
+    bulan: string;
+    tahun: string;
+    status: string;
+    bukti_url: string;
+    warga?: {
+      nama_kk: string;
+      blok_rumah: string;
+      email: string;
+    };
+  };
+  const [pembayaran, setPembayaran] = useState<PembayaranRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAllPembayaran = async () => {
+      if (!supabase) {
+        setLoading(false);
+        return;
+      }
       const { data } = await supabase.from("pembayaran").select("*, warga(nama_kk, blok_rumah, email)").order("id", { ascending: false });
-      setPembayaran(data || []);
+      setPembayaran((data as PembayaranRow[]) || []);
       setLoading(false);
     };
     fetchAllPembayaran();
@@ -36,7 +52,7 @@ export default function AdminDashboard() {
               <tbody>
                 {pembayaran.length === 0 ? (
                   <tr><td colSpan={7} className="text-center py-4 text-gray-500">Belum ada pembayaran.</td></tr>
-                ) : pembayaran.map((item: any) => (
+                ) : pembayaran.map((item) => (
                   <tr key={item.id} className="border-b hover:bg-indigo-50 transition">
                     <td className="px-4 py-2 font-semibold text-indigo-700">{item.warga?.nama_kk}</td>
                     <td className="px-4 py-2 font-semibold text-indigo-700">{item.warga?.blok_rumah}</td>

@@ -4,6 +4,7 @@ import { User } from '@supabase/supabase-js';
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import IuranCrud from "./IuranCrud";
+import AdminDashboard from "./AdminDashboard";
 import UserPembayaran from "./UserPembayaran";
 
 export default function DashboardPage() {
@@ -78,11 +79,10 @@ export default function DashboardPage() {
                 {/* Dashboard admin pembayaran */}
                 <div className="bg-white rounded-xl shadow p-4 border border-indigo-100">
                   {/* Import dan render komponen AdminDashboard di sini */}
-                  {/* @ts-ignore */}
                   <div>
                     {/* Komponen AdminDashboard akan menampilkan tabel pembayaran semua anggota */}
                     {/* Pastikan file AdminDashboard.tsx sudah ada di folder dashboard */}
-                    {require('./AdminDashboard').default()}
+                    <AdminDashboard />
                   </div>
                 </div>
               </div>
