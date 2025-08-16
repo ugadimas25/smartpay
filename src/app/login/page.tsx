@@ -47,7 +47,7 @@ export default function LoginPage() {
         // Setelah login sukses, cek dan insert ke tabel warga jika belum ada
         const { data: userData } = await supabase.auth.getUser();
         if (userData?.user) {
-          const { data: wargaData, error: wargaError } = await supabase.from("warga").select("*").eq("id", userData.user.id);
+          const { data: wargaData, error: wargaError } = await supabase.from("warga").select("id").eq("id", userData.user.id);
           if (wargaError) {
             setError("Gagal cek warga: " + wargaError.message);
             return;
@@ -60,8 +60,15 @@ export default function LoginPage() {
               email: userData.user.email
             });
             if (insertError) {
-              setError("Gagal insert warga: " + insertError.message);
-              return;
+              if (insertError.message.includes("duplicate key value")) {
+                // Sudah ada, tidak perlu insert
+                setError("Data warga sudah terdaftar.");
+                router.push("/dashboard");
+                return;
+              } else {
+                setError("Gagal insert warga: " + insertError.message);
+                return;
+              }
             }
           }
         }
