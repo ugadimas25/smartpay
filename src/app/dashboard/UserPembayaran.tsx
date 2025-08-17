@@ -148,40 +148,69 @@ export default function UserPembayaran({ user }: { user: User | null }) {
         </button>
       </div>
       {loading ? <p>Loading...</p> : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full border rounded-xl shadow bg-white">
-            <thead className="bg-indigo-600 text-white">
-              <tr>
-                <th className="px-4 py-2">Jenis</th>
-                <th className="px-4 py-2">Bulan</th>
-                <th className="px-4 py-2">Tahun</th>
-                <th className="px-4 py-2">Blok</th>
-                <th className="px-4 py-2">Nama KK</th>
-                <th className="px-4 py-2">Status</th>
-                <th className="px-4 py-2">Bukti</th>
-              </tr>
-            </thead>
-            <tbody>
-              {riwayat.length === 0 ? (
-                <tr><td colSpan={7} className="text-center py-4 text-gray-500">Belum ada pembayaran.</td></tr>
-              ) : riwayat.map(item => (
-                <tr key={item.id} className="border-b hover:bg-indigo-50 transition">
-                  <td className="px-4 py-2 font-semibold text-indigo-700">{item.jenis_pembayaran}</td>
-                  <td className="px-4 py-2 font-semibold text-indigo-700">{item.bulan}</td>
-                  <td className="px-4 py-2 font-semibold text-indigo-700">{item.tahun}</td>
-                  <td className="px-4 py-2 font-semibold text-indigo-700">{item.blok_rumah}</td>
-                  <td className="px-4 py-2 font-semibold text-indigo-700">{item.nama_kk}</td>
-                  <td className="px-4 py-2">
-                    <span className={`px-2 py-1 rounded text-xs font-bold ${item.status === "Sudah Bayar" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{item.status}</span>
-                  </td>
-                  <td className="px-4 py-2">
-                    {item.bukti_url && <a href={item.bukti_url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline text-sm">Lihat Bukti</a>}
-                  </td>
+        <>
+          {/* Tabel hanya untuk desktop */}
+          <div className="hidden lg:block overflow-x-auto">
+            <table className="min-w-full border rounded-xl shadow bg-white">
+              <thead className="bg-indigo-600 text-white">
+                <tr>
+                  <th className="px-4 py-2">Jenis</th>
+                  <th className="px-4 py-2">Bulan</th>
+                  <th className="px-4 py-2">Tahun</th>
+                  <th className="px-4 py-2">Blok</th>
+                  <th className="px-4 py-2">Nama KK</th>
+                  <th className="px-4 py-2">Status</th>
+                  <th className="px-4 py-2">Bukti</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {riwayat.length === 0 ? (
+                  <tr><td colSpan={7} className="text-center py-4 text-gray-500">Belum ada pembayaran.</td></tr>
+                ) : riwayat.map(item => (
+                  <tr key={item.id} className="border-b hover:bg-indigo-50 transition">
+                    <td className="px-4 py-2 font-semibold text-indigo-700">{item.jenis_pembayaran}</td>
+                    <td className="px-4 py-2 font-semibold text-indigo-700">{item.bulan}</td>
+                    <td className="px-4 py-2 font-semibold text-indigo-700">{item.tahun}</td>
+                    <td className="px-4 py-2 font-semibold text-indigo-700">{item.blok_rumah}</td>
+                    <td className="px-4 py-2 font-semibold text-indigo-700">{item.nama_kk}</td>
+                    <td className="px-4 py-2">
+                      <span className={`px-2 py-1 rounded text-xs font-bold ${item.status === "Sudah Bayar" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{item.status}</span>
+                    </td>
+                    <td className="px-4 py-2">
+                      {item.bukti_url && <a href={item.bukti_url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline text-sm">Lihat Bukti</a>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {/* Card untuk mobile dan tablet */}
+          <div className="lg:hidden">
+            {riwayat.length === 0 ? (
+              <div className="text-center py-4 text-gray-500">Belum ada pembayaran.</div>
+            ) : riwayat.map(item => (
+              <div key={item.id} className="bg-white rounded-xl shadow p-4 mb-4 border border-indigo-100">
+                <div className="font-bold text-indigo-700 text-lg mb-2">{item.nama_kk}</div>
+                <div className="flex flex-wrap gap-2 text-sm mb-2">
+                  <span className="bg-indigo-50 text-indigo-700 px-2 py-1 rounded">Blok: {item.blok_rumah}</span>
+                  <span className="bg-indigo-50 text-indigo-700 px-2 py-1 rounded">Jenis: {item.jenis_pembayaran}</span>
+                </div>
+                <div className="flex gap-2 text-sm mb-2">
+                  <span className="bg-purple-50 text-purple-700 px-2 py-1 rounded">Bulan: {item.bulan}</span>
+                  <span className="bg-purple-50 text-purple-700 px-2 py-1 rounded">Tahun: {item.tahun}</span>
+                </div>
+                <div className="flex gap-2 items-center mb-2">
+                  <span className={`px-2 py-1 rounded text-xs font-bold ${item.status === "Sudah Bayar" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{item.status}</span>
+                </div>
+                {item.bukti_url && (
+                  <div className="mt-2">
+                    <a href={item.bukti_url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline text-sm">Lihat Bukti</a>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
