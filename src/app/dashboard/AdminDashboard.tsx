@@ -135,46 +135,81 @@ export default function AdminDashboard() {
           <input className="border border-indigo-400 px-3 py-2 rounded text-sm bg-white text-indigo-700 placeholder-indigo-400 font-semibold w-24 sm:w-24 xs:w-full" placeholder="Status" value={filter.status} onChange={e => setFilter(f => ({ ...f, status: e.target.value }))} />
         </div>
         {loading ? <p>Loading...</p> : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full border-separate border-spacing-0 rounded-xl shadow bg-white">
-              <thead className="bg-indigo-600 text-white">
-                <tr>
-                  <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'nama_kk', direction: sortConfig.key === 'nama_kk' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Nama KK {sortConfig.key === 'nama_kk' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
-                  <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'blok_rumah', direction: sortConfig.key === 'blok_rumah' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Blok {sortConfig.key === 'blok_rumah' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
-                  <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'jenis_pembayaran', direction: sortConfig.key === 'jenis_pembayaran' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Jenis {sortConfig.key === 'jenis_pembayaran' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
-                  <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'bulan', direction: sortConfig.key === 'bulan' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Bulan {sortConfig.key === 'bulan' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
-                  <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'tahun', direction: sortConfig.key === 'tahun' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Tahun {sortConfig.key === 'tahun' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
-                  <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'status', direction: sortConfig.key === 'status' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Status {sortConfig.key === 'status' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
-                  <th className="px-4 py-3 font-bold text-base text-center border-b border-indigo-200">Bukti</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedPembayaran.length === 0 ? (
-                  <tr><td colSpan={8} className="text-center py-4 text-gray-500">Belum ada pembayaran.</td></tr>
-                ) : paginatedPembayaran.map((item) => (
-                  <tr key={item.id} className="border-b border-indigo-100 hover:bg-indigo-50 transition">
-                    <td className="px-4 py-3 text-center font-semibold text-indigo-700 align-middle">{item.warga?.nama_kk}</td>
-                    <td className="px-4 py-3 text-center font-semibold text-indigo-700 align-middle">{item.warga?.blok_rumah}</td>
-                    <td className="px-4 py-3 text-center text-indigo-700 font-semibold align-middle whitespace-pre-line">{item.jenis_pembayaran}</td>
-                    <td className="px-4 py-3 text-center text-indigo-700 font-semibold align-middle">{item.bulan}</td>
-                    <td className="px-4 py-3 text-center text-indigo-700 font-semibold align-middle">{item.tahun}</td>
-                    <td className="px-4 py-3 text-center align-middle">
-                      <span className={`px-2 py-1 rounded text-xs font-bold ${item.status === "Sudah Bayar" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{item.status === "Sudah Bayar" ? "Lunas" : "Belum"}</span>
-                    </td>
-                    <td className="px-4 py-3 text-center align-middle">
-                      {item.bukti_url && <a href={item.bukti_url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline text-sm">Lihat Bukti</a>}
-                    </td>
+          <>
+            {/* Tabel untuk desktop, card untuk mobile */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="min-w-full border-separate border-spacing-0 rounded-xl shadow bg-white">
+                <thead className="bg-indigo-600 text-white">
+                  <tr>
+                    <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'nama_kk', direction: sortConfig.key === 'nama_kk' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Nama KK {sortConfig.key === 'nama_kk' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
+                    <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'blok_rumah', direction: sortConfig.key === 'blok_rumah' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Blok {sortConfig.key === 'blok_rumah' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
+                    <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'jenis_pembayaran', direction: sortConfig.key === 'jenis_pembayaran' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Jenis {sortConfig.key === 'jenis_pembayaran' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
+                    <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'bulan', direction: sortConfig.key === 'bulan' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Bulan {sortConfig.key === 'bulan' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
+                    <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'tahun', direction: sortConfig.key === 'tahun' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Tahun {sortConfig.key === 'tahun' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
+                    <th className="px-4 py-3 cursor-pointer font-bold text-base text-center border-b border-indigo-200" onClick={() => setSortConfig({ key: 'status', direction: sortConfig.key === 'status' && sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>Status {sortConfig.key === 'status' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}</th>
+                    <th className="px-4 py-3 font-bold text-base text-center border-b border-indigo-200">Bukti</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            {/* Pagination */}
-            <div className="flex justify-center items-center gap-2 mt-4">
-              <button className="px-3 py-1 rounded bg-indigo-100 text-indigo-700 font-bold" disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>Prev</button>
-              <span className="font-semibold">Halaman {currentPage} / {totalPages}</span>
-              <button className="px-3 py-1 rounded bg-indigo-100 text-indigo-700 font-bold" disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>Next</button>
+                </thead>
+                <tbody>
+                  {paginatedPembayaran.length === 0 ? (
+                    <tr><td colSpan={8} className="text-center py-4 text-gray-500">Belum ada pembayaran.</td></tr>
+                  ) : paginatedPembayaran.map((item) => (
+                    <tr key={item.id} className="border-b border-indigo-100 hover:bg-indigo-50 transition">
+                      <td className="px-4 py-3 text-center font-semibold text-indigo-700 align-middle">{item.warga?.nama_kk}</td>
+                      <td className="px-4 py-3 text-center font-semibold text-indigo-700 align-middle">{item.warga?.blok_rumah}</td>
+                      <td className="px-4 py-3 text-center text-indigo-700 font-semibold align-middle whitespace-pre-line">{item.jenis_pembayaran}</td>
+                      <td className="px-4 py-3 text-center text-indigo-700 font-semibold align-middle">{item.bulan}</td>
+                      <td className="px-4 py-3 text-center text-indigo-700 font-semibold align-middle">{item.tahun}</td>
+                      <td className="px-4 py-3 text-center align-middle">
+                        <span className={`px-2 py-1 rounded text-xs font-bold ${item.status === "Sudah Bayar" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{item.status === "Sudah Bayar" ? "Lunas" : "Belum"}</span>
+                      </td>
+                      <td className="px-4 py-3 text-center align-middle">
+                        {item.bukti_url && <a href={item.bukti_url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline text-sm">Lihat Bukti</a>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {/* Pagination */}
+              <div className="flex justify-center items-center gap-2 mt-4">
+                <button className="px-3 py-1 rounded bg-indigo-100 text-indigo-700 font-bold" disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>Prev</button>
+                <span className="font-semibold">Halaman {currentPage} / {totalPages}</span>
+                <button className="px-3 py-1 rounded bg-indigo-100 text-indigo-700 font-bold" disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>Next</button>
+              </div>
             </div>
-          </div>
+            {/* Card untuk mobile */}
+            <div className="md:hidden">
+              {paginatedPembayaran.length === 0 ? (
+                <div className="text-center py-4 text-gray-500">Belum ada pembayaran.</div>
+              ) : paginatedPembayaran.map((item) => (
+                <div key={item.id} className="bg-white rounded-xl shadow p-4 mb-4 border border-indigo-100">
+                  <div className="font-bold text-indigo-700 text-lg mb-2">{item.warga?.nama_kk}</div>
+                  <div className="flex flex-wrap gap-2 text-sm mb-2">
+                    <span className="bg-indigo-50 text-indigo-700 px-2 py-1 rounded">Blok: {item.warga?.blok_rumah}</span>
+                    <span className="bg-indigo-50 text-indigo-700 px-2 py-1 rounded">Jenis: {item.jenis_pembayaran}</span>
+                  </div>
+                  <div className="flex gap-2 text-sm mb-2">
+                    <span className="bg-purple-50 text-purple-700 px-2 py-1 rounded">Bulan: {item.bulan}</span>
+                    <span className="bg-purple-50 text-purple-700 px-2 py-1 rounded">Tahun: {item.tahun}</span>
+                  </div>
+                  <div className="flex gap-2 items-center mb-2">
+                    <span className={`px-2 py-1 rounded text-xs font-bold ${item.status === "Sudah Bayar" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{item.status === "Sudah Bayar" ? "Lunas" : "Belum"}</span>
+                  </div>
+                  {item.bukti_url && (
+                    <div className="mt-2">
+                      <a href={item.bukti_url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline text-sm">Lihat Bukti</a>
+                    </div>
+                  )}
+                </div>
+              ))}
+              {/* Pagination */}
+              <div className="flex justify-center items-center gap-2 mt-4">
+                <button className="px-3 py-1 rounded bg-indigo-100 text-indigo-700 font-bold" disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>Prev</button>
+                <span className="font-semibold">Halaman {currentPage} / {totalPages}</span>
+                <button className="px-3 py-1 rounded bg-indigo-100 text-indigo-700 font-bold" disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>Next</button>
+              </div>
+            </div>
+          </>
         )}
       </div>
     </div>
