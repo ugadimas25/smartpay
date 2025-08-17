@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import emailjs from "emailjs-com";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
@@ -30,6 +31,21 @@ export default function LoginPage() {
       } else {
         setSuccess("Registrasi berhasil! Silakan cek email untuk verifikasi, lalu login.");
         setIsRegister(false);
+        // Kirim email ke admin via EmailJS
+        emailjs.send(
+          "service_8vvi6bk", // ID Email Services
+          "template_y8h0tz8", // ID Template
+          {
+            name: email,
+            email: email,
+            time: new Date().toLocaleString(),
+            message: "New user just signed up!"
+          },
+          "ugadimas25" // User ID dari EmailJS dashboard
+        ).then(
+          (result) => {},
+          (error) => {}
+        );
       }
     } else {
       // Login
